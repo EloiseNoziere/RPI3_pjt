@@ -6,12 +6,13 @@ Repartition des taches :
 - camera (Erwann)
 - led (Eloise)
 
-Comment utiliser Buildroot
+--> Comment utiliser Buildroot
 
-Comment flasher la carte
+nb : installer la lib libsysfs au moment de la compilation avec Buildroot.
 
-Comment compiler et installer notre outil
+--> Comment flasher la carte
 
-Documentation utilisateur
+--> Comment compiler et installer notre outil
 
+--> Documentation utilisateu
 
