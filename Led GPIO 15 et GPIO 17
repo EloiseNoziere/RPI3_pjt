@@ -1,0 +1,128 @@
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int N = 11;
+int main()
+{
+
+    // Export the pin 15 by writing to /sys/class/gpio/export
+    int fd = open("/sys/class/gpio/export", O_WRONLY);
+    if (fd == -1) {
+        perror("Unable to open /sys/class/gpio/export");
+        exit(1);
+    }
+    if (write(fd, "15", 2) != 2) {
+        perror("Error writing to /sys/class/gpio/export");
+        exit(1);
+    }
+    close(fd);
+
+    // Export the pin 17 by writing to /sys/class/gpio/export
+    if (write(fd, "17", 2) != 2) {
+        perror("Error writing to /sys/class/gpio/export");
+        exit(1);
+    }
+    close(fd);
+
+    // Set the 2 pin to be an output by writing "out" to /sys/class/gpio/gpioN/direction
+    fd = open("/sys/class/gpio/gpio15/direction", O_WRONLY);
+    if (fd == -1) {
+        perror("Unable to open /sys/class/gpio/gpio15/direction");
+        exit(1);
+    }
+
+    if (write(fd, "out", 3) != 3) {
+        perror("Error writing to /sys/class/gpio/gpio15/direction");
+        exit(1);
+    }
+
+    close(fd);
+
+    fd = open("/sys/class/gpio/gpio15/value", O_WRONLY);
+    if (fd == -1) {
+        perror("Unable to open /sys/class/gpio/gpio15/value");
+        exit(1);
+    }
+//
+    fd = open("/sys/class/gpio/gpio17/direction", O_WRONLY);
+    if (fd == -1) {
+        perror("Unable to open /sys/class/gpio/gpio15/direction");
+        exit(1);
+    }
+
+    if (write(fd, "out", 3) != 3) {
+        perror("Error writing to /sys/class/gpio/gpio17/direction");
+        exit(1);
+    }
+
+    close(fd);
+
+    fd = open("/sys/class/gpio/gpio17/value", O_WRONLY);
+    if (fd == -1) {
+        perror("Unable to open /sys/class/gpio/gpio17/value");
+        exit(1);
+    }
+
+
+    if ( N == 00) {		//ATTENTE
+		printf("attente");
+		if (write(fd, "1", 1) != 1) {
+		    perror("Error writing to /sys/class/gpio/gpio15/value");
+		    exit(1);
+		}
+	    close(fd);
+	}
+
+    if ( N == 10) {		//EN TRAIN DE PRENDRE UNE PHOTO LED 50 ms on/off 50 times (5 sec)
+	    printf("en train de prendre une photo");
+	    for (int i = 0; i < 50; i++) {
+		if (write(fd, "1", 1) != 1) {
+		    perror("Error writing to /sys/class/gpio/gpio17/value");
+		    exit(1);
+		}
+		usleep(50000);
+
+		if (write(fd, "0", 1) != 1) {
+		    perror("Error writing to /sys/class/gpio/gpio17/value");
+		    exit(1);
+		}
+		usleep(50000);
+	    }
+	    close(fd);
+	}
+
+    if ( N == 11) {		//PHOTO PRISE
+	    printf("photo prise");
+		if (write(fd, "1", 1) != 1) {
+		    perror("Error writing to /sys/class/gpio/gpio17/value");
+		    exit(1);
+		}
+	    usleep(5000000);
+	    close(fd);
+	}
+
+    // Unexport the pin by writing to /sys/class/gpio/unexport
+
+//    fd = open("/sys/class/gpio/unexport", O_WRONLY);
+//    if (fd == -1) {
+//        perror("Unable to open /sys/class/gpio/unexport");
+//        exit(1);
+//    }
+
+//    if (write(fd, "15", 2) != 2) {
+//        perror("Error writing to /sys/class/gpio/unexport");
+//        exit(1);
+//    }
+
+//    close(fd);
+
+
+    return 0;
+}
+
+
